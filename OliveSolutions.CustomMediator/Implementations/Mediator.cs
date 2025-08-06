@@ -18,7 +18,7 @@ namespace OliveSolutions.CustomMediator.Implementations
             _serviceProvider = serviceProvider;
         }
 
-        public async Task<TResponse> SendAsync<TRequest, TResponse>(TRequest message, CancellationToken cancellationToken = default)
+        public async Task<TResponse> SendAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken = default)
             where TRequest : IRequest
             where TResponse : IResponse
         {
@@ -29,15 +29,15 @@ namespace OliveSolutions.CustomMediator.Implementations
             var handleMethod = handler.GetType().GetMethod("HandleAsync")
                 ?? throw new InvalidOperationException($"HandleAsync method not found on handler for {typeof(TRequest).Name}.");
 
-            var response = handleMethod.Invoke(handler, new object[] { message, cancellationToken })
+            var response = handleMethod.Invoke(handler, new object[] { request, cancellationToken })
                 ?? throw new InvalidOperationException($"HandleAsync method not found on handler for {typeof(TRequest).Name}.");
 
             return await (Task<TResponse>)response;
         }
 
-        public async Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default) where TNotification : INotification
+        public async Task PublishAsync<TNotification>(TNotification notification, CancellationToken cancellationToken = default) where TNotification : INotification
         {
-            var handlerType = typeof(INotificationHandler<>).MakeGenericType(typeof(TNotification), typeof(IResponse));
+            var handlerType = typeof(INotificationHandler<>).MakeGenericType(typeof(TNotification));
 
             var handlers = _serviceProvider.GetServices(handlerType)
                 ?? throw new InvalidOperationException($"Handler for {typeof(TNotification).Name} not found.");
@@ -46,11 +46,11 @@ namespace OliveSolutions.CustomMediator.Implementations
             {
                 if (handler == null) throw new InvalidOperationException($"Handler for {typeof(TNotification).Name} not found.");
 
-                var handleMethod = handler.GetType().GetMethod("HandleAsync")
-                    ?? throw new InvalidOperationException($"HandleAsync method not found on handler for {typeof(TNotification).Name}.");
+                var handleMethod = handler.GetType().GetMethod("HandleNotificationAsync")
+                    ?? throw new InvalidOperationException($"HandleNotificationAsync method not found on handler for {typeof(TNotification).Name}.");
 
                 var response = handleMethod.Invoke(handler, new object[] { notification, cancellationToken })
-                    ?? throw new InvalidOperationException($"HandleAsync method not found on handler for {typeof(TNotification).Name}.");
+                    ?? throw new InvalidOperationException($"HandleNotificationAsync method not found on handler for {typeof(TNotification).Name}.");
 
                 await (Task)response;
             }

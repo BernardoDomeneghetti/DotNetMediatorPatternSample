@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using OliveSolutions.CustomMediator.Abstractions.Dtos;
 
@@ -7,7 +8,7 @@ namespace OliveSolutions.CustomMediator.Abstractions.Handlers
         where TRequest : IRequest
         where TResponse : IResponse
     {
-        Task<TResponse> HandleAsync(TRequest request);
+        Task<TResponse> HandleAsync(TRequest request, CancellationToken cancellationToken = default);
     }
 }
 

@@ -10,9 +10,10 @@ namespace OliveSolutions.CustomMediator.Extensions
 {
     public static class DependencyInjectionExtension
     {
-        public static void AddCustomMediator(this IServiceCollection services, string[] namespaces)
+        public static void AddCustomMediator(this IServiceCollection services)
         {
-            var assemblies = ResolveAssemblies(namespaces);
+            var assemblies = ResolveAssemblies();
+            
             services.AddSingleton<IMediator, Mediator>();
 
             RegisterHandlers(services, assemblies, typeof(IRequestHandler<,>));
@@ -40,17 +41,12 @@ namespace OliveSolutions.CustomMediator.Extensions
             }
         }
         
-        private static Assembly[] ResolveAssemblies(string[] namespaces)
+        private static Assembly[] ResolveAssemblies()
         {
-            return AppDomain.CurrentDomain.GetAssemblies()
-                .Where
-                (
-                    a =>
-                    !a.IsDynamic
-                        && !string.IsNullOrWhiteSpace(a.FullName)
-                        && namespaces.Any(ns => a.FullName.StartsWith(ns))
-                )
-                .ToArray();
+            return AppDomain.CurrentDomain
+                    .GetAssemblies()
+                    .Where(a => !a.IsDynamic && !string.IsNullOrWhiteSpace(a.FullName))
+                    .ToArray();
         }
     }
 }

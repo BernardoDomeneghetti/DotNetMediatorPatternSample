@@ -1,10 +1,9 @@
-
 using MediatorPattern.Domain.Enums;
 using OliveSolutions.CustomMediator.Abstractions.Dtos;
 
-namespace MediatorPattern.Application.Commands;
+namespace MediatorPattern.Application.Notifications;
 
-public record class UpdateProductStorageCommand: IRequest
+public record class ProductStorageUpdatedNotification: INotification
 {
     public int ProductId { get; set; }
     public decimal MovementAmount { get; set; }

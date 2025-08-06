@@ -10,7 +10,7 @@ namespace OliveSolutions.CustomMediator.Abstractions
             where TRequest : IRequest
             where TResponse : IResponse;
 
-        Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default)
+        Task PublishAsync<TNotification>(TNotification notification, CancellationToken cancellationToken = default)
             where TNotification : INotification;
     }
 }

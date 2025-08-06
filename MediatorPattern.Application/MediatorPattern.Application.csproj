@@ -3,10 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MediatorPattern.Application.Abstractions\MediatorPattern.Application.Abstractions.csproj" />
     <ProjectReference Include="..\MediatorPattern.Domain\MediatorPattern.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
+    <ProjectReference Include="..\OliveSolutions.CustomMediator\OliveSolutions.CustomMediator.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

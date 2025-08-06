@@ -1,4 +1,4 @@
-using MediatorPattern.Abstractions.Application.Dtos;
+using OliveSolutions.CustomMediator.Abstractions.Dtos;
 
 namespace MediatorPattern.Application.Responses;
 
